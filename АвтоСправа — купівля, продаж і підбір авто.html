@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>АвтоСправа — купівля, продаж і підбір авто</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt:#1C1B1A;
+    --graphite:#2A2826;
+    --paper:#F2EFE9;
+    --amber:#E8A33D;
+    --steel:#4A6572;
+    --line:#4a453f;
+    --text-dim:#b8b2a7;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:inherit;margin:0;padding:0}
+  html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth;}
+  html,body{height:100%;}
+  body{
+    background:var(--asphalt);
+    color:var(--paper);
+    font-family:'Inter', -apple-system, Helvetica, Arial, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand,.big-num{
+    font-family:'Oswald', 'Arial Narrow', sans-serif;
+    text-transform:none;
+    letter-spacing:.2px;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* dashed road-line divider */
+  .roadline{
+    height:0;
+    border-top:3px dashed var(--amber);
+    opacity:.55;
+    margin:0 auto;
+  }
+
+  header{
+    position:sticky; top:0; top:env(safe-area-inset-top,0px);
+    z-index:20;
+    background:rgba(28,27,26,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  header .bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+    max-width:1080px; margin:0 auto;
+  }
+  .brand{font-size:22px; font-weight:600; letter-spacing:.5px;}
+  .brand span{color:var(--amber);}
+  nav{display:flex; gap:28px; font-size:15px;}
+  nav a{color:var(--text-dim); transition:color .15s;}
+  nav a:hover{color:var(--paper);}
+  .nav-cta{
+    display:inline-block;
+    background:var(--amber); color:var(--asphalt);
+    padding:9px 18px; border-radius:2px;
+    font-weight:600; font-size:14px;
+    transition:transform .15s, background .15s;
+  }
+  .nav-cta:hover{background:#f0b258;}
+  .menu-toggle{display:none;}
+
+  /* HERO */
+  .hero{
+    padding:100px 0 80px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:end;
+  }
+  .plate{
+    display:inline-block;
+    border:2px solid var(--paper);
+    border-radius:4px;
+    padding:4px 12px;
+    font-family:'Oswald', sans-serif;
+    font-size:13px;
+    letter-spacing:2px;
+    color:var(--paper);
+    margin-bottom:26px;
+  }
+  .hero h1{
+    font-size:clamp(38px,5.2vw,60px);
+    font-weight:600;
+    line-height:1.06;
+    max-width:14ch;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--amber);
+  }
+  .hero p.lede{
+    margin-top:22px;
+    font-size:18px;
+    color:var(--text-dim);
+    max-width:46ch;
+  }
+  .hero-actions{
+    margin-top:34px;
+    display:flex; gap:16px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .btn-primary{
+    background:var(--amber); color:var(--asphalt);
+    padding:14px 26px; border-radius:2px;
+    font-weight:600; font-size:15px;
+    border:none; cursor:pointer;
+    transition:background .15s, transform .15s;
+  }
+  .btn-primary:hover{background:#f0b258; transform:translateY(-1px);}
+  .btn-ghost{
+    padding:14px 4px;
+    border-bottom:1px solid var(--steel);
+    font-size:15px; color:var(--paper);
+  }
+  .hero-panel{
+    border:1px solid var(--line);
+    background:var(--graphite);
+    padding:28px;
+    border-radius:3px;
+  }
+  .hero-panel .row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:14px 0; border-bottom:1px solid var(--line);
+  }
+  .hero-panel .row:last-child{border-bottom:none;}
+  .hero-panel .row .num{font-family:'Oswald',sans-serif; font-size:26px; color:var(--amber); font-weight:600;}
+  .hero-panel .row .lbl{font-size:14px; color:var(--text-dim); max-width:20ch; text-align:right;}
+
+  /* SERVICES */
+  .services{padding:86px 0;}
+  .section-head{max-width:56ch; margin-bottom:48px;}
+  .section-head h2{font-size:clamp(28px,3.4vw,38px); font-weight:600; line-height:1.15;}
+  .section-head p{color:var(--text-dim); margin-top:14px; font-size:16px;}
+
+  .service-list{border-top:3px dashed var(--amber); opacity:1;}
+  .service-item{
+    border-bottom:1px solid var(--line);
+    padding:32px 0;
+    display:grid; grid-template-columns:120px 1fr; gap:28px; align-items:start;
+  }
+  .service-item .tag{
+    font-family:'Oswald',sans-serif; font-size:14px; color:var(--steel);
+    letter-spacing:1px;
+    padding-top:4px;
+  }
+  .service-item h3{font-size:22px; font-weight:500;}
+  .service-item p{color:var(--text-dim); margin-top:8px; max-width:60ch; font-size:15.5px;}
+
+  /* INVENTORY */
+  .inventory{padding:86px 0; background:var(--graphite); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .inv-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); margin-top:44px;
+  }
+  .car-card{
+    background:var(--asphalt);
+    padding:26px 24px 24px;
+    display:flex; flex-direction:column;
+    transition:background .25s ease;
+  }
+  .car-card:hover{background:#232120;}
+  .car-card .car-icon{
+    width:100%; height:76px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+  }
+  .car-card .car-icon svg{width:120px; height:56px; transition:transform .3s ease;}
+  .car-card:hover .car-icon svg{animation:floatCar 1.4s ease-in-out infinite;}
+  .car-card .badge{
+    align-self:flex-start;
+    font-size:11.5px; letter-spacing:1px; color:var(--asphalt);
+    background:var(--amber); padding:3px 9px; border-radius:2px;
+    margin-bottom:14px; font-family:'Oswald',sans-serif;
+  }
+  .car-card h3{font-size:19px; font-weight:500;}
+  .car-card .spec{font-size:14px; color:var(--text-dim); margin-top:8px;}
+  .car-card .price{
+    font-family:'Oswald',sans-serif; font-size:24px; color:var(--amber);
+    font-weight:600; margin-top:16px;
+  }
+  .car-card .more{
+    margin-top:14px; font-size:14px; color:var(--paper);
+    border-bottom:1px solid var(--steel); align-self:flex-start;
+    padding-bottom:2px; transition:border-color .2s ease, color .2s ease;
+  }
+  .car-card:hover .more{border-color:var(--amber); color:var(--amber);}
+  .inv-note{margin-top:28px; font-size:14.5px; color:var(--text-dim);}
+
+  /* PROCESS */
+  .process{padding:86px 0; background:var(--graphite); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .steps{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+    margin-top:44px;
+  }
+  .step{
+    padding:0 22px 0 0;
+    border-right:1px dashed var(--line);
+  }
+  .step:last-child{border-right:none;}
+  .step .big-num{font-size:44px; color:var(--amber); font-weight:600; line-height:1;}
+  .step h3{margin-top:14px; font-size:17px; font-weight:500;}
+  .step p{margin-top:8px; font-size:14.5px; color:var(--text-dim);}
+
+  /* TRUST */
+  .trust{padding:86px 0;}
+  .trust .wrap{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;}
+  .trust h2{font-size:clamp(26px,3vw,34px); font-weight:600; line-height:1.2; max-width:16ch;}
+  .trust p{margin-top:18px; color:var(--text-dim); font-size:16px; max-width:48ch;}
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+  .stat{background:var(--asphalt); padding:26px 22px;}
+  .stat .n{font-family:'Oswald',sans-serif; font-size:32px; color:var(--amber); font-weight:600;}
+  .stat .l{font-size:13.5px; color:var(--text-dim); margin-top:6px;}
+
+  /* CONTACT */
+  .contact{padding:86px 0 100px; border-top:1px solid var(--line);}
+  .contact .wrap{display:grid; grid-template-columns:.9fr 1.1fr; gap:56px;}
+  .contact h2{font-size:clamp(28px,3.4vw,36px); font-weight:600;}
+  .contact p{margin-top:16px; color:var(--text-dim); max-width:40ch;}
+  .contact-info{margin-top:28px; font-size:15px;}
+  .contact-info div{padding:10px 0; border-bottom:1px solid var(--line); display:flex; gap:14px;}
+  .contact-info span.k{color:var(--steel); min-width:80px;}
+
+  form{display:flex; flex-direction:column; gap:16px;}
+  label{font-size:13px; color:var(--text-dim); display:block; margin-bottom:6px;}
+  input, textarea{
+    width:100%;
+    background:var(--graphite);
+    border:1px solid var(--line);
+    color:var(--paper);
+    padding:13px 14px;
+    font-family:inherit; font-size:15px;
+    border-radius:2px;
+  }
+  input:focus, textarea:focus{
+    outline:2px solid var(--amber); outline-offset:1px; border-color:var(--amber);
+  }
+  textarea{resize:vertical; min-height:100px;}
+  .form-note{font-size:13px; color:var(--text-dim); margin-top:4px;}
+
+  footer{border-top:1px solid var(--line); padding:28px 0;}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
+  footer .brand{font-size:16px;}
+  footer .fine{font-size:13px; color:var(--text-dim);}
+
+  /* animation */
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(22px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes glowPulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(232,163,61,.0);}
+    50%{box-shadow:0 0 22px 2px rgba(232,163,61,.35);}
+  }
+  @keyframes roadScroll{
+    from{background-position:0 0;}
+    to{background-position:-120px 0;}
+  }
+  @keyframes floatCar{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-5px);}
+  }
+
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+  .reveal.d1{transition-delay:.08s;}
+  .reveal.d2{transition-delay:.16s;}
+  .reveal.d3{transition-delay:.24s;}
+  .reveal.d4{transition-delay:.32s;}
+
+  .hero-road{
+    height:4px; width:100%;
+    margin-top:60px;
+    background-image:repeating-linear-gradient(90deg, var(--amber) 0 34px, transparent 34px 60px);
+    opacity:.55;
+    animation:roadScroll 2.4s linear infinite;
+  }
+  .plate{animation:glowPulse 3.2s ease-in-out infinite;}
+  .nav-cta, .btn-primary{transition:background .15s, transform .15s, box-shadow .25s;}
+  .nav-cta:hover, .btn-primary:hover{transform:translateY(-2px); box-shadow:0 8px 18px rgba(232,163,61,.25);}
+
+  .service-item{transition:padding-left .25s ease, border-color .25s ease;}
+  .service-item:hover{padding-left:14px; border-color:var(--amber);}
+  .service-item:hover .tag{color:var(--amber);}
+  .service-item .tag{transition:color .25s ease;}
+
+  .stat{transition:transform .25s ease, background .25s ease;}
+  .stat:hover{transform:translateY(-4px); background:var(--graphite);}
+
+  .step{transition:transform .25s ease;}
+  .step:hover{transform:translateY(-4px);}
+  .step:hover .big-num{color:#f4c375;}
+  .step .big-num{transition:color .25s ease;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important; scroll-behavior:auto!important; animation:none!important;}
+    .reveal{opacity:1!important; transform:none!important;}
+  }
+
+  @media (max-width:820px){
+    nav{display:none;}
+    .hero .wrap{grid-template-columns:1fr; gap:36px;}
+    .steps{grid-template-columns:1fr 1fr; row-gap:32px;}
+    .step{border-right:none; border-bottom:1px dashed var(--line); padding-bottom:24px;}
+    .trust .wrap, .contact .wrap{grid-template-columns:1fr;}
+    .service-item{grid-template-columns:1fr; gap:8px;}
+    .inv-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:520px){
+    .steps{grid-template-columns:1fr;}
+    .inv-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">АВТО<span>СПРАВА</span></div>
+    <nav>
+      <a href="#services">Послуги</a>
+      <a href="#inventory">Авто в наявності</a>
+      <a href="#process">Як це працює</a>
+      <a href="#contact">Контакти</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Залишити заявку</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="plate">АВТО · ЕКСПЕРТ · СУПРОВІД</div>
+      <h1 class="reveal visible">Куплю, продам і підберу авто <em>без зайвого клопоту</em></h1>
+      <p class="lede reveal visible d1">Особистий супровід на кожному етапі: від пошуку потрібної машини і перевірки історії до оформлення угоди та продажу вашого авто за гарною ціною.</p>
+      <div class="hero-actions reveal visible d2">
+        <a class="btn-primary" href="#contact">Залишити заявку</a>
+        <a class="btn-ghost" href="#inventory">Дивитись авто в наявності</a>
+      </div>
+      <div class="hero-road"></div>
+    </div>
+    <div class="hero-panel">
+      <div class="row"><span class="num">120+</span><span class="lbl">автомобілів підібрано та куплено за останні 2 роки</span></div>
+      <div class="row"><span class="num">7</span><span class="lbl">днів у середньому — від заявки до готової угоди</span></div>
+      <div class="row"><span class="num">0</span><span class="lbl">прихованих комісій — ціна обумовлюється заздалегідь</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Чим я можу допомогти</h2>
+      <p>Чотири формати роботи — під будь-яке завдання, пов'язане з купівлею або продажем автомобіля.</p>
+    </div>
+    <div class="service-list">
+      <div class="service-item reveal">
+        <div class="tag">ПІДБІР</div>
+        <div>
+          <h3>Підбір автомобіля під ваш запит</h3>
+          <p>Визначаємо бюджет і вимоги, шукаю варіанти на ринку, перевіряю історію, технічний стан та юридичну чистоту — ви обираєте з уже перевірених варіантів.</p>
+        </div>
+      </div>
+      <div class="service-item reveal d1">
+        <div class="tag">КУПІВЛЯ</div>
+        <div>
+          <h3>Купівля авто «під ключ»</h3>
+          <p>Торг із продавцем, огляд на СТО, оформлення документів і постановка на облік — беру на себе всю угоду від першого дзвінка до передачі ключів.</p>
+        </div>
+      </div>
+      <div class="service-item reveal d2">
+        <div class="tag">ПРОДАЖ</div>
+        <div>
+          <h3>Продаж вашого автомобіля</h3>
+          <p>Готую оголошення, роблю фото та опис, відповідаю на дзвінки, проводжу перегляди й торг — ви отримуєте гроші, не витрачаючи час на посередників.</p>
+        </div>
+      </div>
+      <div class="service-item reveal d3">
+        <div class="tag">СУПРОВІД</div>
+        <div>
+          <h3>Допомога при продажу власними силами</h3>
+          <p>Якщо продаєте самі — допоможу з оцінкою ринкової ціни, перевірю договір і документи, підкажу, на що звернути увагу під час зустрічі з покупцем.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="inventory" id="inventory">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Автомобілі в наявності</h2>
+      <p>Частина вже перевірених і готових до продажу авто. Інші варіанти — під ваш запит.</p>
+    </div>
+    <div class="inv-grid">
+      <div class="car-card reveal">
+        <span class="badge">В НАЯВНОСТІ</span>
+        <div class="car-icon">
+          <svg viewBox="0 0 120 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 40h4l6-14c2-5 7-8 12-8h20c5 0 10 3 12 8l6 14h4c2 0 4 2 4 4v4c0 2-2 3-4 3h-6a9 9 0 1 1-18 0H32a9 9 0 1 1-18 0H8c-2 0-4-1-4-3v-4c0-2 2-4 4-4z" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M26 24l4-8h16l6 8" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="23" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+            <circle cx="77" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3>Volkswagen Golf VII</h3>
+        <div class="spec">2016 р. · 1.6 TDI · механіка · 142 000 км</div>
+        <div class="price">9 800 $</div>
+        <a class="more" href="#contact">Запитати про це авто →</a>
+      </div>
+      <div class="car-card reveal d1">
+        <span class="badge">В НАЯВНОСТІ</span>
+        <div class="car-icon">
+          <svg viewBox="0 0 120 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 40h4l6-14c2-5 7-8 12-8h20c5 0 10 3 12 8l6 14h4c2 0 4 2 4 4v4c0 2-2 3-4 3h-6a9 9 0 1 1-18 0H32a9 9 0 1 1-18 0H8c-2 0-4-1-4-3v-4c0-2 2-4 4-4z" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M26 24l4-8h16l6 8" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="23" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+            <circle cx="77" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3>Toyota RAV4 IV</h3>
+        <div class="spec">2015 р. · 2.0 бензин · автомат · 118 000 км</div>
+        <div class="price">14 500 $</div>
+        <a class="more" href="#contact">Запитати про це авто →</a>
+      </div>
+      <div class="car-card reveal d2">
+        <span class="badge">В НАЯВНОСТІ</span>
+        <div class="car-icon">
+          <svg viewBox="0 0 120 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 40h4l6-14c2-5 7-8 12-8h20c5 0 10 3 12 8l6 14h4c2 0 4 2 4 4v4c0 2-2 3-4 3h-6a9 9 0 1 1-18 0H32a9 9 0 1 1-18 0H8c-2 0-4-1-4-3v-4c0-2 2-4 4-4z" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M26 24l4-8h16l6 8" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="23" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+            <circle cx="77" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3>Skoda Octavia III</h3>
+        <div class="spec">2017 р. · 1.4 TSI · робот · 97 000 км</div>
+        <div class="price">11 900 $</div>
+        <a class="more" href="#contact">Запитати про це авто →</a>
+      </div>
+      <div class="car-card reveal">
+        <span class="badge">В НАЯВНОСТІ</span>
+        <div class="car-icon">
+          <svg viewBox="0 0 120 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 40h4l6-14c2-5 7-8 12-8h20c5 0 10 3 12 8l6 14h4c2 0 4 2 4 4v4c0 2-2 3-4 3h-6a9 9 0 1 1-18 0H32a9 9 0 1 1-18 0H8c-2 0-4-1-4-3v-4c0-2 2-4 4-4z" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M26 24l4-8h16l6 8" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="23" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+            <circle cx="77" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3>Hyundai Tucson III</h3>
+        <div class="spec">2019 р. · 2.0 дизель · автомат · 61 000 км</div>
+        <div class="price">18 700 $</div>
+        <a class="more" href="#contact">Запитати про це авто →</a>
+      </div>
+      <div class="car-card reveal d1">
+        <span class="badge">В НАЯВНОСТІ</span>
+        <div class="car-icon">
+          <svg viewBox="0 0 120 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 40h4l6-14c2-5 7-8 12-8h20c5 0 10 3 12 8l6 14h4c2 0 4 2 4 4v4c0 2-2 3-4 3h-6a9 9 0 1 1-18 0H32a9 9 0 1 1-18 0H8c-2 0-4-1-4-3v-4c0-2 2-4 4-4z" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M26 24l4-8h16l6 8" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="23" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+            <circle cx="77" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3>BMW 3 (F30)</h3>
+        <div class="spec">2014 р. · 2.0 дизель · автомат · 156 000 км</div>
+        <div class="price">10 400 $</div>
+        <a class="more" href="#contact">Запитати про це авто →</a>
+      </div>
+      <div class="car-card reveal d2">
+        <span class="badge">В НАЯВНОСТІ</span>
+        <div class="car-icon">
+          <svg viewBox="0 0 120 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 40h4l6-14c2-5 7-8 12-8h20c5 0 10 3 12 8l6 14h4c2 0 4 2 4 4v4c0 2-2 3-4 3h-6a9 9 0 1 1-18 0H32a9 9 0 1 1-18 0H8c-2 0-4-1-4-3v-4c0-2 2-4 4-4z" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M26 24l4-8h16l6 8" stroke="#E8A33D" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="23" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+            <circle cx="77" cy="47" r="5" stroke="#E8A33D" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3>Renault Kadjar</h3>
+        <div class="spec">2018 р. · 1.6 дизель · механіка · 88 000 км</div>
+        <div class="price">13 200 $</div>
+        <a class="more" href="#contact">Запитати про це авто →</a>
+      </div>
+    </div>
+    <p class="inv-note">Не знайшли підходящий варіант? Залиште заявку на підбір — знайду авто під ваш бюджет і вимоги.</p>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Як проходить робота</h2>
+      <p>Один і той самий зрозумілий порядок — незалежно від того, купуєте ви чи продаєте.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="big-num">01</div>
+        <h3>Заявка і розмова</h3>
+        <p>Обговорюємо завдання, бюджет і терміни — по телефону або при зустрічі.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="big-num">02</div>
+        <h3>Пошук і перевірка</h3>
+        <p>Підбираю варіанти або покупців, перевіряю історію та документи.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="big-num">03</div>
+        <h3>Огляд і торг</h3>
+        <p>Організую огляд на СТО, веду переговори про ціну від вашого імені.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="big-num">04</div>
+        <h3>Угода</h3>
+        <p>Оформлюємо документи і завершуємо угоду — швидко і без сюрпризів.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Чому звертаються саме до мене</h2>
+      <p>Працюю без штату й офісу — тому дешевше за автосалони і уважніше до кожної угоди. Усі перевірки проводжу особисто, нічого не віддаю на аутсорс.</p>
+    </div>
+    <div class="stat-grid reveal d1">
+      <div class="stat"><div class="n">8 років</div><div class="l">на ринку вживаних авто</div></div>
+      <div class="stat"><div class="n">120+</div><div class="l">закритих угод</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">людина веде вашу угоду від початку до кінця</div></div>
+      <div class="stat"><div class="n">5%</div><div class="l">фіксована комісія, без прихованих доплат</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Залишити заявку</h2>
+      <p>Розкажіть, що потрібно — куплю, продам, підберу авто або проконсультую щодо вашої угоди. Відповідаю протягом дня.</p>
+      <div class="contact-info">
+        <div><span class="k">Телефон</span><span>+380 (00) 000-00-00</span></div>
+        <div><span class="k">Telegram</span><span>@auto_delo</span></div>
+        <div><span class="k">Місто</span><span>Київ та область</span></div>
+      </div>
+    </div>
+    <form class="reveal d1" onsubmit="event.preventDefault(); this.reset(); document.getElementById('form-ok').style.display='block';">
+      <div>
+        <label for="name">Ім'я</label>
+        <input id="name" type="text" required placeholder="Як до вас звертатися">
+      </div>
+      <div>
+        <label for="phone">Телефон</label>
+        <input id="phone" type="tel" required placeholder="+380">
+      </div>
+      <div>
+        <label for="msg">Що потрібно</label>
+        <textarea id="msg" placeholder="Наприклад: підібрати кросовер до 15 000$"></textarea>
+      </div>
+      <button class="btn-primary" type="submit" style="align-self:flex-start;">Відправити заявку</button>
+      <div class="form-note" id="form-ok" style="display:none; color:var(--amber);">Заявку відправлено — зв'яжуся з вами найближчим часом.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">АВТО<span style="color:var(--amber)">СПРАВА</span></div>
+    <div class="fine">© 2026 · Купівля, продаж і підбір автомобілів</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){
+      els.forEach(function(el){ el.classList.add('visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  }catch(e){
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('visible'); });
+  }
+})();
+</script>
+</body>
+</html>
